@@ -1,0 +1,116 @@
+﻿Version=6.5
+NumberOfModules=0
+Build1=Default,b4a.acc,Full
+Build2=New_1,b4a.example,Full
+Build3=acccompendieum,b4a.acccompendium,Full
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+IconFile=
+NumberOfFiles=3
+File1=Accueil.bal
+File2=projetAcc.bal
+File3=testACC.bal
+NumberOfLibraries=2
+Library1=core
+Library2=phone
+@EndOfDesignText@
+#Region Module Attributes
+	#FullScreen: True
+	#IncludeTitle: False
+	#ApplicationLabel: Acc-Compendium
+	#VersionCode: 1
+	#VersionName: 
+	#SupportedOrientations: portrait
+	#CanInstallToExternalStorage: False
+#End Region
+
+'Activity module
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+	Dim capteurACC As PhoneAccelerometer
+	Dim capteurGYRO As PhoneSensors
+	Dim xsave As Float
+	Dim ysave As Float
+	Dim Montimer As Timer
+End Sub
+
+Sub Globals
+	'These global variables will be redeclared each time the activity is created.
+	'These variables can only be accessed from this module.
+	Dim X_Label As Label
+	Dim Y_Label As Label
+	Dim Z_Label As Label
+	Private Acc As Label
+	Private acc_X As Label
+	Private acc_Y As Label
+	Private acc_Z As Label
+	Private Panel1 As Panel
+	Private Projet As Button
+	Private Acce As Button
+	Private Titre As Label
+	Private Compendium As ImageView
+	Private Retour As Button
+	Private TitreProjet As Label
+	Private X_pos As Label
+	Private Y_pos As Label
+	Private Panel2 As Panel
+	Private Pos_X As Label
+	Private Pos_Y As Label
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	'Do not forget to load the layout file created with the visual designer. For example:
+	Activity.LoadLayout("Accueil")
+	capteurACC.StartListening("inclinaison")
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub inclinaison1_accelerometerchanged(X As Float,Y As Float,Z As Float)
+	X_Label.Text=NumberFormat(X,1,2)
+	Y_Label.Text=NumberFormat(Y,2,3)
+	Z_Label.Text=NumberFormat(Z,2,0)
+End Sub
+
+Sub inclinaison2_accelerometerchanged(X As Float,Y As Float,Z As Float)
+	xsave=X
+	ysave=Y
+End Sub
+
+Sub top_tick
+	If Compendium.Left=10 Then Compendium.Left=Compendium.Left+1
+	If Compendium.Left=600 Then Compendium.Left=Compendium.Left-1
+	If xsave>2 Then Compendium.Left=Compendium.Left-1
+	If xsave<-2 Then Compendium.Left=Compendium.Left+1
+	X_pos.Text=Compendium.Left
+	If Compendium.Top=0 Then Compendium.Top=Compendium.Top+1
+	If Compendium.Top=600 Then Compendium.Top=Compendium.Top-1
+	If ysave>2 Then Compendium.Top=Compendium.Top-1
+	If ysave<-2 Then Compendium.Top=Compendium.Top+1
+	Y_pos.Text=Compendium.Top
+End Sub
+
+Sub Projet_Click
+	Activity.RemoveAllViews
+	Activity.LoadLayout("projetAcc")
+	capteurACC.StartListening("inclinaison2")
+	Montimer.Initialize("top",10)
+	Montimer.Enabled=True
+End Sub
+
+Sub Acce_Click
+	Activity.RemoveAllViews
+	Activity.LoadLayout("testacc")
+	capteurACC.StartListening("inclinaison1")
+End Sub
+
+Sub Retour_Click
+	Activity.RemoveAllViews
+	Activity.LoadLayout("Accueil")
+End Sub
