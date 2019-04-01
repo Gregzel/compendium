@@ -1,2 +1,5 @@
 # compendium-b4a
-Petite application développée sous B4a
+Mise en oeuvre de l'accélérometre sous Android
+
+# Logiciel
+![](/B4A.png)
